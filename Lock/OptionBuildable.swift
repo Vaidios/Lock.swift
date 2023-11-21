@@ -140,13 +140,18 @@ public extension OptionBuildable {
             return self.termsOfServiceURL.absoluteString
         }
         set {
-          if #available(iOS 17.0, *) {
-            guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
-            self.termsOfServiceURL = url
-          } else {
+#if swift(>=5.9)
+            if #available(iOS 17.0, *) {
+                guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
+                self.termsOfServiceURL = url
+            } else {
+                guard let url = URL(string: newValue) else { return }
+                self.termsOfServiceURL = url
+            }
+#else
             guard let url = URL(string: newValue) else { return }
             self.termsOfServiceURL = url
-          }
+#endif
         }
     }
 
@@ -156,13 +161,18 @@ public extension OptionBuildable {
             return self.privacyPolicyURL.absoluteString
         }
         set {
-          if #available(iOS 17.0, *) {
-            guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
-            self.privacyPolicyURL = url
-          } else {
+#if swift(>=5.9)
+            if #available(iOS 17.0, *) {
+                guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
+                self.privacyPolicyURL = url
+            } else {
+                guard let url = URL(string: newValue) else { return }
+                self.privacyPolicyURL = url
+            }
+#else
             guard let url = URL(string: newValue) else { return }
             self.privacyPolicyURL = url
-          }
+#endif
         }
     }
 
@@ -173,13 +183,18 @@ public extension OptionBuildable {
             return url.absoluteString
         }
         set {
-          if #available(iOS 17.0, *) {
-            guard let newValue, let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
-            self.supportURL = url
-          } else {
+#if swift(>=5.9)
+            if #available(iOS 17.0, *) {
+                guard let newValue, let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
+                self.supportURL = url
+            } else {
+                guard let newValue, let url = URL(string: newValue) else { return }
+                self.supportURL = url
+            }
+#else
             guard let newValue, let url = URL(string: newValue) else { return }
             self.supportURL = url
-          }
+#endif
         }
     }
 
@@ -190,6 +205,7 @@ public extension OptionBuildable {
             return url.absoluteString
         }
         set {
+#if swift(>=5.9)
           if #available(iOS 17.0, *) {
             guard let newValue, let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
             self.configurationBaseURL = url
@@ -197,6 +213,10 @@ public extension OptionBuildable {
             guard let newValue, let url = URL(string: newValue) else { return }
             self.configurationBaseURL = url
           }
+#else
+            guard let newValue, let url = URL(string: newValue) else { return }
+            self.configurationBaseURL = url
+#endif
         }
     }
 
