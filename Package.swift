@@ -1,11 +1,11 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.8
 
 import PackageDescription
 
 let package = Package(
     name: "Lock",
     defaultLocalization: "en",
-    platforms: [.iOS(.v9)],
+    platforms: [.iOS(.v12)],
     products: [
         .library(name: "Lock", targets: ["Lock"])
     ],

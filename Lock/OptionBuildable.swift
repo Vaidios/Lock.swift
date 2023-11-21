@@ -140,8 +140,13 @@ public extension OptionBuildable {
             return self.termsOfServiceURL.absoluteString
         }
         set {
+          if #available(iOS 17.0, *) {
+            guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
+            self.termsOfServiceURL = url
+          } else {
             guard let url = URL(string: newValue) else { return }
             self.termsOfServiceURL = url
+          }
         }
     }
 
@@ -151,8 +156,13 @@ public extension OptionBuildable {
             return self.privacyPolicyURL.absoluteString
         }
         set {
+          if #available(iOS 17.0, *) {
+            guard let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
+            self.privacyPolicyURL = url
+          } else {
             guard let url = URL(string: newValue) else { return }
             self.privacyPolicyURL = url
+          }
         }
     }
 
@@ -163,8 +173,13 @@ public extension OptionBuildable {
             return url.absoluteString
         }
         set {
-            guard let value = newValue, let url = URL(string: value) else { return }
+          if #available(iOS 17.0, *) {
+            guard let newValue, let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
             self.supportURL = url
+          } else {
+            guard let newValue, let url = URL(string: newValue) else { return }
+            self.supportURL = url
+          }
         }
     }
 
@@ -175,8 +190,13 @@ public extension OptionBuildable {
             return url.absoluteString
         }
         set {
-            guard let value = newValue, let url = URL(string: value) else { return }
+          if #available(iOS 17.0, *) {
+            guard let newValue, let url = URL(string: newValue, encodingInvalidCharacters: false) else { return }
             self.configurationBaseURL = url
+          } else {
+            guard let newValue, let url = URL(string: newValue) else { return }
+            self.configurationBaseURL = url
+          }
         }
     }
 

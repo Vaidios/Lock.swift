@@ -24,6 +24,8 @@ import Foundation
 import Nimble
 @testable import Lock
 
+typealias Predicate = Nimble.Predicate
+
 func beExpandedMode(isLogin login: Bool = true) -> Predicate<AuthCollectionView.Mode> {
         return Predicate<AuthCollectionView.Mode>.define("be with expanded mode with isLogin: <\(login)>") { expression, failureMessage -> PredicateResult in
         if let actual = try expression.evaluate(), case .expanded(let isLogin) = actual, isLogin == login {
