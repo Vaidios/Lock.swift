@@ -27,7 +27,7 @@ import Nimble
 
 class MultifactorPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var interactor: MockMultifactorInteractor!
         var presenter: MultifactorPresenter!

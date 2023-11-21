@@ -28,7 +28,7 @@ import Nimble
 
 class InputFieldSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         describe("delegate") {
 

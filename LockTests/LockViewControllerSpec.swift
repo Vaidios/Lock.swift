@@ -29,7 +29,7 @@ import Nimble
 
 class LockViewControllerSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var controller: LockViewController!
 

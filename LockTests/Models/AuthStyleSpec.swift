@@ -67,7 +67,7 @@ class AuthStyleSpecSharedExamplesConfiguration: QuickConfiguration {
 
 class AuthStyleSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         describe("init") {
             let strategy = AuthStyle(name: "a name")

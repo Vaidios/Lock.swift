@@ -30,7 +30,7 @@ private let message = UUID().uuidString
 
 class LoggerSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var logger: Logger!
         var output: MockLoggerOutput!

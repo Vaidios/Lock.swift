@@ -26,7 +26,7 @@ import Nimble
 
 class UsernameValidatorSpec: QuickSpec {
         
-    override func spec() {
+    override class func spec() {
 
         context("default") {
             var validator: UsernameValidator { return UsernameValidator() }

@@ -28,7 +28,7 @@ import Nimble
 
 class BannerMessagePresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var root: UIView!
         var presenter: BannerMessagePresenter!

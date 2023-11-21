@@ -29,7 +29,7 @@ import Auth0
 
 class ClassicRouterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var lock: Lock!
         var controller: MockLockController!

@@ -27,7 +27,7 @@ import Nimble
 
 class PolicyViewSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         describe("init") {
 

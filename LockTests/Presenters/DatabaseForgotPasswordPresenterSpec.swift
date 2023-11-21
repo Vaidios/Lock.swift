@@ -28,7 +28,7 @@ import Nimble
 
 class DatabaseForgotPasswordPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var interactor: MockForgotInteractor!
         var presenter: DatabaseForgotPasswordPresenter!

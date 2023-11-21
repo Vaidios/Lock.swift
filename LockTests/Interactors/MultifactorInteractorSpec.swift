@@ -31,7 +31,7 @@ import Auth0
 @testable import Lock
 
 class MultifactorInteractorSpec: QuickSpec {
-    override func spec() {
+    override class func spec() {
 
         var user: User!
         var interactor: MultifactorInteractor!

@@ -32,7 +32,7 @@ import OHHTTPStubsSwift
 
 class DatabasePasswordInteractorSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         let authentication = Auth0.authentication(clientId: clientId, domain: domain)
 

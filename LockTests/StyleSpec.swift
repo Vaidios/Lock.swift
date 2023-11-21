@@ -28,7 +28,7 @@ import Nimble
 
 class StyleSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         describe("style Auth0") {
 

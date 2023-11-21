@@ -27,7 +27,7 @@ import Nimble
 
 class OptionsSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var options: LockOptions!
 

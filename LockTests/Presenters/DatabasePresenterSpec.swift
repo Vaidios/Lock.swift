@@ -28,7 +28,7 @@ import Nimble
 
 class DatabasePresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
         var enterpriseInteractor: EnterpriseDomainInteractor!
         var oauth2: MockOAuth2!
         var connections: OfflineConnections!

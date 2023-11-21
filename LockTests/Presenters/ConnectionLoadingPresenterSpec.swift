@@ -27,7 +27,7 @@ import Nimble
 
 class ConnectionLoadingPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var interactor: MockConnectionsLoader!
         var presenter: ConnectionLoadingPresenter!

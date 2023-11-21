@@ -30,7 +30,7 @@ import Auth0
 
 class LockSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var lock: Lock!
         var authentication: Authentication!

@@ -27,7 +27,7 @@ import Nimble
 @testable import Lock
 
 class AuthCollectionViewSpec: QuickSpec {
-    override func spec() {
+    override class func spec() {
 
         context("expanded") {
 

@@ -27,7 +27,7 @@ import Auth0
 @testable import Lock
 
 class ObserverStoreSpec: QuickSpec {
-    override func spec() {
+    override class func spec() {
 
         describe("Dispatcher") {
 

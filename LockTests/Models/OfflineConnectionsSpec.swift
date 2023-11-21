@@ -27,7 +27,7 @@ import Nimble
 
 class OfflineConnectionsSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         it("should report if there are no conenctions") {
             let connections = OfflineConnections()

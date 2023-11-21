@@ -28,7 +28,7 @@ import Auth0
 @testable import Lock
 
 class EnterpriseDomainInteractorSpec: QuickSpec {
-    override func spec() {
+    override class func spec() {
 
         let authentication = MockAuthentication(clientId: clientId, domain: domain)
 

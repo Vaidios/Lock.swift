@@ -26,7 +26,7 @@ import Nimble
 
 class PasswordPolicyValidatorSpec: QuickSpec {
     
-    override func spec() {
+    override class func spec() {
 
         it("should return no error when password is allowed by policy") {
             let policy = passingPolicy(withConditionCount: 1)

@@ -38,7 +38,7 @@ private let FacebookToken = UUID().uuidString.replacingOccurrences(of: "-", with
 
 class Auth0OAuth2InteractorSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         let authentication = MockAuthentication(clientId: clientId, domain: domain)
 

@@ -26,7 +26,7 @@ import Nimble
 
 class InputValidationErrorSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var database: DatabaseConnection!
 

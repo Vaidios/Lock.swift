@@ -27,7 +27,7 @@ import Nimble
 
 class RuleSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
 
         describe("length") {

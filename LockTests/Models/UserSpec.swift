@@ -26,7 +26,7 @@ import Nimble
 
 class UserSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var user: User!
 

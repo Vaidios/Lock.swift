@@ -28,7 +28,7 @@ import Nimble
 
 class AuthPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var presenter: AuthPresenter!
         var interactor: MockOAuth2!

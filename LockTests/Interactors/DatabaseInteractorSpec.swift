@@ -33,7 +33,7 @@ import OHHTTPStubsSwift
 
 class DatabaseInteractorSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
         let authentication = Auth0.authentication(clientId: clientId, domain: domain)
         let webAuthentication = MockOAuth2()
 

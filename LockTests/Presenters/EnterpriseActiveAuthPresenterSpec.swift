@@ -28,7 +28,7 @@ import Auth0
 
 class EnterpriseActiveAuthPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
         let authentication = Auth0.authentication(clientId: clientId, domain: domain)
 
         var interactor: EnterpriseActiveAuthInteractor!

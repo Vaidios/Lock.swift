@@ -32,7 +32,7 @@ let policyKey = "policy"
 
 class PasswordPolicySpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         describe("none") {
             let policy = PasswordPolicy.none()

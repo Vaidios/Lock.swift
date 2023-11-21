@@ -26,7 +26,7 @@ import Nimble
 
 class CountryCodesSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var store: CountryCodes?
 

@@ -31,7 +31,7 @@ private let countryData = CountryCode(isoCode: "UK", phoneCode: "+44", localized
 
 class PasswordlessPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         let authentication = Auth0.authentication(clientId: clientId, domain: domain)
 

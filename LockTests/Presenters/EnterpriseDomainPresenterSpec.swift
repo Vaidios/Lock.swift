@@ -27,7 +27,7 @@ import Nimble
 
 class EnterpriseDomainPresenterSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         var interactor: EnterpriseDomainInteractor!
         var presenter: EnterpriseDomainPresenter!

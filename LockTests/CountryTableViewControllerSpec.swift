@@ -28,7 +28,7 @@ import Nimble
 
 class CountryTableViewControllerSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         let countryData = CountryCodes()
 

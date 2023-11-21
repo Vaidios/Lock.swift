@@ -31,7 +31,7 @@ import OHHTTPStubsSwift
 
 class CDNLoaderInteractorSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
 
         afterEach {
             Auth0Stubs.cleanAll()
