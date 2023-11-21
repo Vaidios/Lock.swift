@@ -31,7 +31,7 @@ import OHHTTPStubsSwift
 @testable import Lock
 
 private let DomainURL = URL(fileURLWithPath: domain)
-private let Timeout = DispatchTimeInterval.seconds(2)
+private let Timeout = NimbleTimeInterval.seconds(2)
 private let AccessToken = UUID().uuidString.replacingOccurrences(of: "-", with: "")
 private let IdToken = UUID().uuidString.replacingOccurrences(of: "-", with: "")
 private let FacebookToken = UUID().uuidString.replacingOccurrences(of: "-", with: "")

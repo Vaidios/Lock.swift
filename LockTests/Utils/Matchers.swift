@@ -24,41 +24,41 @@ import Foundation
 import Nimble
 @testable import Lock
 
-typealias Predicate = Nimble.Predicate
+typealias Predicate = Nimble.Matcher
 
 func beExpandedMode(isLogin login: Bool = true) -> Predicate<AuthCollectionView.Mode> {
-        return Predicate<AuthCollectionView.Mode>.define("be with expanded mode with isLogin: <\(login)>") { expression, failureMessage -> PredicateResult in
+    return Predicate<AuthCollectionView.Mode>.define("be with expanded mode with isLogin: <\(login)>") { expression, failureMessage -> MatcherResult in
         if let actual = try expression.evaluate(), case .expanded(let isLogin) = actual, isLogin == login {
-            return PredicateResult(status: .matches, message: failureMessage)
+            return MatcherResult(status: .matches, message: failureMessage)
         }
-         return PredicateResult(status: .doesNotMatch, message: failureMessage)
+            return MatcherResult(status: .doesNotMatch, message: failureMessage)
     }
 }
 
 func beCompactMode() -> Predicate<AuthCollectionView.Mode> {
-    return Predicate<AuthCollectionView.Mode>.define("be with compact mode") { expression, failureMessage -> PredicateResult in
+    return Predicate<AuthCollectionView.Mode>.define("be with compact mode") { expression, failureMessage -> MatcherResult in
         if let actual = try expression.evaluate(), case .compact = actual {
-            return PredicateResult(status: .matches, message: failureMessage)
+            return MatcherResult(status: .matches, message: failureMessage)
         }
-        return PredicateResult(status: .doesNotMatch, message: failureMessage)
+        return MatcherResult(status: .doesNotMatch, message: failureMessage)
     }
 }
 
 func beError(error: LocalizableError) -> Predicate<LocalizableError> {
-    return Predicate<LocalizableError>.define("be error with message \(error.localizableMessage)") { expression, failureMessage -> PredicateResult in
+    return Predicate<LocalizableError>.define("be error with message \(error.localizableMessage)") { expression, failureMessage -> MatcherResult in
         if let actual = try expression.evaluate(), actual.localizableMessage == error.localizableMessage && actual.userVisible == error.userVisible {
-            return PredicateResult(status: .matches, message: failureMessage)
+            return MatcherResult(status: .matches, message: failureMessage)
         }
-        return PredicateResult(status: .doesNotMatch, message: failureMessage)
+      return MatcherResult(status: .doesNotMatch, message: failureMessage)
     }
 }
 
 
 func beErrorResult() -> Predicate<Result> {
-    return Predicate<Result>.define("be an error result") { expression, failureMessage -> PredicateResult in
+  return Predicate<Result>.define("be an error result") { expression, failureMessage -> MatcherResult in
         if let actual = try expression.evaluate(), case .error = actual {
-            return PredicateResult(status: .matches, message: failureMessage)
+            return MatcherResult(status: .matches, message: failureMessage)
         }
-        return PredicateResult(status: .doesNotMatch, message: failureMessage)
+      return MatcherResult(status: .doesNotMatch, message: failureMessage)
     }
 }

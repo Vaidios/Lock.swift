@@ -955,12 +955,12 @@ class DatabasePresenterSpec: QuickSpec {
 }
 
 func haveAction(_ title: String, style: A0AlertActionStyle) -> Predicate<[UIAlertAction]> {
-    return Predicate<[UIAlertAction]>.define("have action with title \(title) and style \(style)") { expression, failureMessage -> PredicateResult in
+    return Predicate<[UIAlertAction]>.define("have action with title \(title) and style \(style)") { expression, failureMessage -> MatcherResult in
         if let actions = try expression.evaluate() {
             if actions.contains(where: { alert in
                 return alert.title == title && alert.style == style
-            }) { return PredicateResult(status: .matches, message: failureMessage) }
+            }) { return MatcherResult(status: .matches, message: failureMessage) }
         }
-        return PredicateResult(status: .doesNotMatch, message: failureMessage)
+        return MatcherResult(status: .doesNotMatch, message: failureMessage)
     }
 }
