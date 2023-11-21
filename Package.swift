@@ -10,15 +10,17 @@ let package = Package(
         .library(name: "Lock", targets: ["Lock"])
     ],
     dependencies: [
-         .package(name: "Auth0", url: "https://github.com/auth0/Auth0.swift.git", .upToNextMajor(from: "1.39.1")),
-         .package(name: "Quick", url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "7.0.0")),
-         .package(name: "Nimble", url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "13.0.0")),
-         .package(name: "OHHTTPStubs", url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0"))
+        .package(url: "https://github.com/auth0/Auth0.swift.git", "1.39.1" ..< "2.0.0"),
+        .package(url: "https://github.com/Quick/Quick.git", "7.0.0" ..< "8.0.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", "13.0.0" ..< "14.0.0"),
+        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", "9.0.0" ..< "10.0.0"),
     ],
     targets: [
         .target(
             name: "Lock",
-            dependencies: ["Auth0"],
+            dependencies: [
+                .product(name: "Auth0", package: "Auth0.swift"),
+            ],
             path: "Lock",
             exclude: ["Info.plist"],
             resources: [
@@ -29,9 +31,9 @@ let package = Package(
             name: "LockTests",
             dependencies: [
                 "Lock",
-                "Auth0",
                 "Quick",
                 "Nimble",
+                .product(name: "Auth0", package: "Auth0.swift"),
                 .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
             ],
             path: "LockTests",
