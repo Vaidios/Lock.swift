@@ -41,7 +41,7 @@ func forStyle(_ style: AuthStyle, name: String, iconName: String) -> [String: An
 }
 
 class AuthStyleSpecSharedExamplesConfiguration: QuickConfiguration {
-    override class func configure(_ configuration: Configuration) {
+    override class func configure(_ configuration: QCKConfiguration) {
         sharedExamples(FirstClassStyleExample) { (context: SharedExampleContext) in
 
             let style = context()[StyleKey] as! AuthStyle
