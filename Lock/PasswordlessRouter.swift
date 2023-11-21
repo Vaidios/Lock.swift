@@ -55,14 +55,14 @@ struct PasswordlessRouter: Router {
             let presenter = PasswordlessPresenter(interactor: interactor, connection: connection, navigator: self, options: self.lock.options)
             // +Social
             if !connections.oauth2.isEmpty {
-                let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+                let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: self.lock.webAuth, dispatcher: observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
                 presenter.authPresenter = AuthPresenter(connections: connections.oauth2, interactor: interactor, customStyle: self.lock.style.oauth2)
             }
             return presenter
         }
         // Social Only
         if !connections.oauth2.isEmpty {
-            let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+            let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: self.lock.webAuth, dispatcher: observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
             let presenter = AuthPresenter(connections: connections.oauth2, interactor: interactor, customStyle: self.lock.style.oauth2)
             return presenter
         }

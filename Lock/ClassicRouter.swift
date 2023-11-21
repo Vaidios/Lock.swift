@@ -51,15 +51,16 @@ struct ClassicRouter: Router {
         case (.some(let database), let oauth2, let enterprise):
             guard self.lock.options.allow != [.ResetPassword] && self.lock.options.initialScreen != .resetPassword else { return forgotPassword }
             let authentication = self.lock.authentication
-            let webAuthInteractor = Auth0OAuth2Interactor(authentication: authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+            let webAuth = self.lock.webAuth
+            let webAuthInteractor = Auth0OAuth2Interactor(authentication: authentication, webAuth: webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
             let interactor = DatabaseInteractor(connection: database, authentication: authentication, webAuthentication: webAuthInteractor, user: self.user, options: self.lock.options, dispatcher: lock.observerStore)
             let presenter = DatabasePresenter(interactor: interactor, connection: database, navigator: self, options: self.lock.options, style: self.lock.style)
             if !oauth2.isEmpty {
-                let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+                let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
                 presenter.authPresenter = AuthPresenter(connections: oauth2, interactor: interactor, customStyle: self.lock.style.oauth2)
             }
             if !enterprise.isEmpty {
-                let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+                let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
                 let interactor = EnterpriseDomainInteractor(connections: connections, user: self.user, authentication: authInteractor)
                 presenter.enterpriseInteractor = interactor
             }
@@ -71,17 +72,17 @@ struct ClassicRouter: Router {
         // Single Enterprise with support for passive auth only (web auth) and some social connections
         case (nil, let oauth2, let enterprise) where enterprise.hasJustOne(andNotIn: allowListForActiveAuth):
             guard let connection = enterprise.first else { return nil }
-            let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+            let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: self.lock.webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
             let connections: [OAuth2Connection] = oauth2 + [connection]
             return AuthPresenter(connections: connections, interactor: authInteractor, customStyle: self.lock.style.oauth2)
         // Social connections only
         case (nil, let oauth2, let enterprise) where enterprise.isEmpty:
-            let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+            let interactor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: self.lock.webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
             let presenter = AuthPresenter(connections: oauth2, interactor: interactor, customStyle: self.lock.style.oauth2)
             return presenter
         // Multiple enterprise connections and maybe some social
         case (nil, let oauth2, let enterprise) where !enterprise.isEmpty:
-            let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
+            let authInteractor = Auth0OAuth2Interactor(authentication: self.lock.authentication, webAuth: self.lock.webAuth, dispatcher: lock.observerStore, options: self.lock.options, nativeHandlers: self.lock.nativeHandlers)
             let interactor = EnterpriseDomainInteractor(connections: connections, user: self.user, authentication: authInteractor)
             let presenter = EnterpriseDomainPresenter(interactor: interactor, navigator: self, options: self.lock.options)
             if !oauth2.isEmpty {

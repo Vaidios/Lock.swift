@@ -50,11 +50,12 @@ extension PasswordlessAuthTransaction {
                                      authentication: self.authentication)
                 .request(withIdentifier: self.identifier, password: passcode, options: self.options)
         } else {
-            request = authentication.login(email: self.identifier,
-                                           code: passcode,
-                                           audience: self.options.audience,
-                                           scope: self.options.scope,
-                                           parameters: self.options.parameters)
+            request = authentication.login(
+                email: self.identifier,
+                code: passcode,
+                audience: self.options.audience,
+                scope: self.options.scope
+            )
         }
         request.start { self.handle(identifier: self.identifier, result: $0, callback: callback) }
     }

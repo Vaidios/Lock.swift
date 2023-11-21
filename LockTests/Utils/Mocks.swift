@@ -239,36 +239,34 @@ class MockAuthentication: Authentication {
 
     var webAuth: MockWebAuth?
     
-  var webAuthResult: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(AuthenticationError(string: "FAILED", statusCode: 500)) }
+    var webAuthResult: () -> Swift.Result<Credentials, WebAuthError> = { return .failure(WebAuthError.unknown) }
 
     required init(clientId: String, domain: String) {
         self.authentication = Auth0.authentication(clientId: clientId, domain: domain)
         self.url = self.authentication.url
         self.clientId = self.authentication.clientId
         self.telemetry = self.authentication.telemetry
+        self.webAuth = MockWebAuth()
     }
 
     func webAuth(withConnection connection: String) -> WebAuth {
-        let mockWebAuth = MockWebAuth().connection(connection)
-        self.webAuth = mockWebAuth.connection(connection)
-        self.webAuth?.result = self.webAuthResult
-        return self.webAuth!
+        return webAuth!.connection(connection)
     }
 
-    func tokenInfo(token: String) -> Request<Profile, AuthenticationError> {
-        return self.authentication.userInfo(token: token)
+    func tokenInfo(token: String) -> Request<UserInfo, AuthenticationError> {
+        return self.authentication.userInfo(withAccessToken: token)
     }
 
     func resetPassword(email: String, connection: String) -> Request<Void, AuthenticationError> {
         return self.authentication.resetPassword(email: email, connection: connection)
     }
 
-    func userInfo(token: String) -> Request<Profile, AuthenticationError> {
-        return self.authentication.userInfo(token: token)
+    func userInfo(token: String) -> Request<UserInfo, AuthenticationError> {
+        return self.authentication.userInfo(withAccessToken: token)
     }
 
     func tokenExchange(withParameters parameters: [String : Any]) -> Request<Credentials, AuthenticationError> {
-        return self.authentication.tokenExchange(withParameters: parameters)
+        return self.authentication.codeExchange(withCode: "", codeVerifier: "", redirectURI: "")
     }
 
     func login(withOTP otp: String, mfaToken: String) -> Request<Credentials, AuthenticationError> {
@@ -284,11 +282,11 @@ class MockAuthentication: Authentication {
     }
 
     func multifactorChallenge(mfaToken: String, types: [String]?, channel: String?, authenticatorId: String?) -> Request<Challenge, AuthenticationError> {
-        return self.authentication.multifactorChallenge(mfaToken: mfaToken, types: types, channel: channel, authenticatorId: authenticatorId)
+        return self.authentication.multifactorChallenge(mfaToken: mfaToken, types: types, authenticatorId: authenticatorId)
     }
 
-    func tokenExchange(withCode code: String, codeVerifier: String, redirectURI: String) -> Request<Credentials, AuthenticationError> {
-        return self.authentication.tokenExchange(withCode: code, codeVerifier: codeVerifier, redirectURI: redirectURI)
+    func codeExchange(withCode code: String, codeVerifier: String, redirectURI: String) -> Request<Credentials, AuthenticationError> {
+        return self.authentication.codeExchange(withCode: code, codeVerifier: codeVerifier, redirectURI: redirectURI)
     }
 
     func renew(withRefreshToken refreshToken: String) -> Request<Credentials, AuthenticationError> {
@@ -296,15 +294,7 @@ class MockAuthentication: Authentication {
     }
 
     func login(usernameOrEmail username: String, password: String, multifactorCode: String?, connection: String, scope: String, parameters: [String : Any]) -> Request<Credentials, AuthenticationError> {
-        return self.authentication.login(usernameOrEmail: username, password: password, multifactorCode: multifactorCode, connection: connection, scope: scope, parameters: parameters)
-    }
-
-    func delegation(withParameters parameters: [String : Any]) -> Request<[String : Any], AuthenticationError> {
-        return self.authentication.delegation(withParameters: parameters)
-    }
-
-    func loginSocial(token: String, connection: String, scope: String, parameters: [String : Any]) -> Request<Credentials, AuthenticationError> {
-        return self.authentication.loginSocial(token: token, connection: connection, scope: scope, parameters: parameters)
+        return self.authentication.login(usernameOrEmail: username, password: password, realmOrConnection: "", scope: scope)
     }
 
     func revoke(refreshToken: String) -> Request<Void, AuthenticationError> {
@@ -321,10 +311,32 @@ class MockAuthentication: Authentication {
     
 }
 
+import Combine
+
 class MockWebAuth: WebAuth {
+    func start(_ callback: @escaping (Auth0.WebAuthResult<Auth0.Credentials>) -> Void) {
+        
+    }
+    
+    func start() async throws -> Auth0.Credentials {
+        return .init()
+    }
+    
+    func start() -> AnyPublisher<Auth0.Credentials, Auth0.WebAuthError> {
+        return Fail(error: Auth0.WebAuthError.unknown).eraseToAnyPublisher()
+    }
+    
+    func provider(_ provider: @escaping Auth0.WebAuthProvider) -> Self {
+        return self
+    }
+    
+    func onClose(_ callback: (() -> Void)?) -> Self {
+        return self
+    }
+    
 
     var clientId: String = "CLIENT_ID"
-    var url: URL = .a0_url(domain)
+    var url: URL = URL(string: "google.com")!
 
     var connection: String? = nil
     var parameters: [String: String] = [:]
@@ -334,7 +346,7 @@ class MockWebAuth: WebAuth {
     var leeway: Int? = nil
     var maxAge: Int? = nil
 
-  var result: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(AuthenticationError(string: "FAILED", statusCode: 500)) }
+    var result: () -> Swift.Result<Credentials, AuthenticationError> = { return .failure(AuthenticationError(info: [:], statusCode: 500)) }
     var telemetry: Telemetry = Telemetry()
     var logger: Auth0.Logger? = nil
 
@@ -378,12 +390,8 @@ class MockWebAuth: WebAuth {
         return self
     }
 
-    func start(_ callback: @escaping (Auth0.Result<Credentials>) -> ()) {
+    func start(_ callback: @escaping (Swift.Result<Credentials, AuthenticationError>) -> ()) {
         callback(self.result())
-    }
-
-    func responseType(_ response: [ResponseType]) -> Self {
-        return self
     }
 
     func nonce(_ nonce: String) -> Self {
@@ -467,58 +475,58 @@ class MockViewController: UIViewController {
     }
 }
 
-class MockNativeAuthHandler: AuthProvider {
+//class MockNativeAuthHandler: AuthProvider {
+//
+//    var transaction: MockNativeAuthTransaction!
+//    var authentication: Authentication!
+//    static var validProvider: Bool = true
+//
+//    func login(withConnection connection: String, scope: String, parameters: [String : Any]) -> NativeAuthTransaction {
+//        let transaction = MockNativeAuthTransaction(connection: connection, scope: scope, parameters: parameters, authentication: self.authentication)
+//        self.transaction = transaction
+//        return transaction
+//    }
+//
+//    static func isAvailable() -> Bool {
+//        return MockNativeAuthHandler.validProvider
+//    }
+//}
 
-    var transaction: MockNativeAuthTransaction!
-    var authentication: Authentication!
-    static var validProvider: Bool = true
-
-    func login(withConnection connection: String, scope: String, parameters: [String : Any]) -> NativeAuthTransaction {
-        let transaction = MockNativeAuthTransaction(connection: connection, scope: scope, parameters: parameters, authentication: self.authentication)
-        self.transaction = transaction
-        return transaction
-    }
-
-    static func isAvailable() -> Bool {
-        return MockNativeAuthHandler.validProvider
-    }
-}
-
-class MockNativeAuthTransaction: NativeAuthTransaction {
-    var connection: String
-    var scope: String
-    var parameters: [String : Any]
-    var authentication: Authentication
-
-    init(connection: String, scope: String, parameters: [String: Any], authentication: Authentication) {
-        self.connection = connection
-        self.scope = scope
-        self.parameters = parameters
-        self.authentication = authentication
-    }
-
-    var delayed: NativeAuthTransaction.Callback = { _ in }
-
-    func auth(callback: @escaping NativeAuthTransaction.Callback) {
-        self.delayed = callback
-    }
-
-    func cancel() {
-      self.delayed(.failure(WebAuthError.userCancelled))
-        self.delayed = { _ in }
-    }
-
-    func resume(_ url: URL, options: [A0URLOptionsKey : Any]) -> Bool {
-        self.delayed(self.onNativeAuth())
-        self.delayed = { _ in }
-        return true
-    }
-
-    /// Test Hooks
-    var onNativeAuth: () -> Auth0.Result<NativeAuthCredentials> = {
-      return .success(NativeAuthCredentials(token: "SocialToken", extras: [:]))
-    }
-}
+//class MockNativeAuthTransaction: NativeAuthTransaction {
+//    var connection: String
+//    var scope: String
+//    var parameters: [String : Any]
+//    var authentication: Authentication
+//
+//    init(connection: String, scope: String, parameters: [String: Any], authentication: Authentication) {
+//        self.connection = connection
+//        self.scope = scope
+//        self.parameters = parameters
+//        self.authentication = authentication
+//    }
+//
+//    var delayed: NativeAuthTransaction.Callback = { _ in }
+//
+//    func auth(callback: @escaping NativeAuthTransaction.Callback) {
+//        self.delayed = callback
+//    }
+//
+//    func cancel() {
+//      self.delayed(.failure(WebAuthError.userCancelled))
+//        self.delayed = { _ in }
+//    }
+//
+//    func resume(_ url: URL, options: [A0URLOptionsKey : Any]) -> Bool {
+//        self.delayed(self.onNativeAuth())
+//        self.delayed = { _ in }
+//        return true
+//    }
+//
+//    /// Test Hooks
+//    var onNativeAuth: () -> Swift.Result<NativeAuthCredentials, Error> = {
+//      return .success(NativeAuthCredentials(token: "SocialToken", extras: [:]))
+//    }
+//}
 
 func mockCredentials() -> Credentials {
     return Credentials(accessToken: UUID().uuidString, tokenType: "Bearer")

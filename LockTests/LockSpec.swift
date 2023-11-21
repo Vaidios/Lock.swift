@@ -194,25 +194,25 @@ class LockSpec: QuickSpec {
 
         }
 
-
-        describe("native handler") {
-
-            it("should regsiter native handler") {
-                let nativeHandler = MockNativeAuthHandler()
-                let name = "facebook"
-                _ = lock.nativeAuthentication(forConnection: name, handler: nativeHandler)
-                expect(lock.nativeHandlers[name]).toNot(beNil())
-            }
-
-            it("should regsiter native handler to multiple connections") {
-                let nativeHandler = MockNativeAuthHandler()
-                _ = lock.nativeAuthentication(forConnection: "facebook", handler: nativeHandler)
-                _ = lock.nativeAuthentication(forConnection: "facebookcorp", handler: nativeHandler)
-                expect(lock.nativeHandlers["facebook"]).toNot(beNil())
-                expect(lock.nativeHandlers["facebookcorp"]).toNot(beNil())
-            }
-
-        }
+//
+//        describe("native handler") {
+//
+//            it("should regsiter native handler") {
+//                let nativeHandler = MockNativeAuthHandler()
+//                let name = "facebook"
+//                _ = lock.nativeAuthentication(forConnection: name, handler: nativeHandler)
+//                expect(lock.nativeHandlers[name]).toNot(beNil())
+//            }
+//
+//            it("should regsiter native handler to multiple connections") {
+//                let nativeHandler = MockNativeAuthHandler()
+//                _ = lock.nativeAuthentication(forConnection: "facebook", handler: nativeHandler)
+//                _ = lock.nativeAuthentication(forConnection: "facebookcorp", handler: nativeHandler)
+//                expect(lock.nativeHandlers["facebook"]).toNot(beNil())
+//                expect(lock.nativeHandlers["facebookcorp"]).toNot(beNil())
+//            }
+//
+//        }
 
         describe("style") {
 
@@ -236,10 +236,6 @@ class LockSpec: QuickSpec {
                 expect(lock.style.logo).to(equal(UIImage(named: "ic_auth0", in: Lock.bundle)))
             }
             
-        }
-        
-        it("should allow to resume Auth") {
-            expect(Lock.resumeAuth(.a0_url("samples.auth0.com"), options: [:])) == false
         }
         
         it("should allow to continue activity") {

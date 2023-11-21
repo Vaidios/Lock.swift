@@ -26,6 +26,7 @@ import Auth0
 struct Auth0OAuth2Interactor: OAuth2Authenticatable, Loggable {
 
     let authentication: Authentication
+    let webAuth: WebAuth
     let dispatcher: Dispatcher
     let options: Options
     let nativeHandlers: [String: AuthProvider]
@@ -45,8 +46,8 @@ struct Auth0OAuth2Interactor: OAuth2Authenticatable, Loggable {
         parameters["login_hint"] = loginHint
         parameters["screen_hint"] = screenHint
 
-        var auth = authentication
-            .webAuth(withConnection: connection)
+        var auth = webAuth
+            .connection(connection)
             .scope(self.options.scope)
             .parameters(parameters)
 
@@ -90,18 +91,18 @@ struct Auth0OAuth2Interactor: OAuth2Authenticatable, Loggable {
 
     private func nativeAuth(withConnection connection: String, nativeAuth: AuthProvider, callback: @escaping (OAuth2AuthenticatableError?) -> Void) {
 
-        nativeAuth.login(withConnection: connection, scope: self.options.scope, parameters: self.options.parameters)
-            .start { result in
-                Queue.main.async {
-                    switch result {
-                    case .success(let credentials):
-                        callback(nil)
-                        self.dispatcher.dispatch(result: .auth(credentials))
-                    case .failure(let error):
-                        callback(.couldNotAuthenticate)
-                        self.dispatcher.dispatch(result: .error(error))
-                    }
-                }
-            }
+//        nativeAuth.login(withConnection: connection, scope: self.options.scope, parameters: self.options.parameters)
+//            .start { result in
+//                Queue.main.async {
+//                    switch result {
+//                    case .success(let credentials):
+//                        callback(nil)
+//                        self.dispatcher.dispatch(result: .auth(credentials))
+//                    case .failure(let error):
+//                        callback(.couldNotAuthenticate)
+//                        self.dispatcher.dispatch(result: .error(error))
+//                    }
+//                }
+//            }
     }
 }

@@ -31,6 +31,7 @@ class EnterpriseDomainInteractorSpec: QuickSpec {
     override class func spec() {
 
         let authentication = MockAuthentication(clientId: clientId, domain: domain)
+        let webAuth = authentication.webAuth!
 
         var authInteractor: Auth0OAuth2Interactor!
         var credentials: Credentials?
@@ -46,7 +47,7 @@ class EnterpriseDomainInteractorSpec: QuickSpec {
             credentials = nil
             var dispatcher = ObserverStore()
             dispatcher.onAuth = {credentials = $0}
-            authInteractor = Auth0OAuth2Interactor(authentication: authentication, dispatcher: dispatcher, options: LockOptions(), nativeHandlers: [:])
+            authInteractor = Auth0OAuth2Interactor(authentication: authentication, webAuth: webAuth, dispatcher: dispatcher, options: LockOptions(), nativeHandlers: [:])
             enterprise = EnterpriseDomainInteractor(connections: connections, user: user, authentication: authInteractor)
         }
 

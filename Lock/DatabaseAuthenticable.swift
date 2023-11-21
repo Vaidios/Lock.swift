@@ -44,11 +44,11 @@ protocol CredentialAuthenticatable {
 
 extension CredentialAuthenticatable {
 
-    func handle(identifier: String, result: Auth0.Result<Credentials>, callback: (CredentialAuthError?) -> Void) {
+    func handle(identifier: String, result: Swift.Result<Credentials, AuthenticationError>, callback: (CredentialAuthError?) -> Void) {
         switch result {
         case .failure(let cause as AuthenticationError) where cause.isMultifactorRequired || cause.isMultifactorEnrollRequired:
             self.logger.error("Multifactor is required for user <\(identifier)>")
-            if let mfaToken: String = cause.value("mfa_token") {
+            if let mfaToken: String = cause.info["mfa_token"] as? String {
                 callback(.multifactorTokenRequired(token: mfaToken))
             } else {
                 callback(.multifactorRequired)
@@ -66,14 +66,14 @@ extension CredentialAuthenticatable {
             self.logger.error("Multifactor code is invalid for user <\(identifier)>")
             callback(.multifactorInvalid)
             self.dispatcher.dispatch(result: .error(CredentialAuthError.multifactorInvalid))
-        case .failure(let cause as AuthenticationError) where cause.isRuleError && cause.description.lowercased() == "user is blocked":
+        case .failure(let cause as AuthenticationError) where cause.isRuleError && cause.localizedDescription.lowercased() == "user is blocked":
             self.logger.error("Blocked user <\(identifier)>")
             callback(.userBlocked)
             self.dispatcher.dispatch(result: .error(CredentialAuthError.userBlocked))
         case .failure(let cause as AuthenticationError) where cause.isRuleError:
             self.logger.error("Failed login of user <\(identifier)> by custom rule")
-            callback(.customRuleFailure(cause: cause.description))
-            self.dispatcher.dispatch(result: .error(CredentialAuthError.customRuleFailure(cause: cause.description)))
+            callback(.customRuleFailure(cause: cause.localizedDescription))
+            self.dispatcher.dispatch(result: .error(CredentialAuthError.customRuleFailure(cause: cause.localizedDescription)))
         case .failure(let cause as AuthenticationError) where cause.code == "password_change_required":
             self.logger.error("Change password required for user <\(identifier)>")
             callback(.passwordChangeRequired)

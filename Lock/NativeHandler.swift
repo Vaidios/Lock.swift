@@ -27,3 +27,9 @@ struct NativeHandler {
     var name: [String]
     var handler: AuthProvider
 }
+
+public struct AuthProvider {
+    static func isAvailable() -> Bool {
+        false
+    }
+}

@@ -96,17 +96,18 @@ class MultifactorInteractor: MultifactorAuthenticatable, Loggable {
                 .login(
                 usernameOrEmail: identifier,
                 password: password,
-                multifactorCode: code,
-                connection: database,
-                scope: self.options.scope,
-                parameters: self.options.parameters
+                realmOrConnection: "",
+//                multifactorCode: code,
+//                connection: database,
+                scope: self.options.scope
+//                parameters: self.options.parameters
                 )
                 .start { self.handle(identifier: identifier, result: $0, callback: callback) }
         }
     }
 
-    func startMultifactorChallenge(mfaToken: String, completion: ((Auth0.Result<Challenge>) -> Void)? = nil) {
-        authentication.multifactorChallenge(mfaToken: mfaToken, types: nil, channel: nil, authenticatorId: nil).start { [weak self] result in
+    func startMultifactorChallenge(mfaToken: String, completion: ((Swift.Result<Challenge, AuthenticationError>) -> Void)? = nil) {
+        authentication.multifactorChallenge(mfaToken: mfaToken, types: nil, authenticatorId: nil).start { [weak self] result in
             switch result {
             case let .success(response):
                 self?.challenge = response

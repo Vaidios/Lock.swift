@@ -296,27 +296,6 @@ public class Lock: NSObject {
     }
 
     /**
-     Resumes an Auth session from Safari, e.g. when authenticating with Facebook.
-
-     This method should be called from your `AppDelegate`
-
-     ```
-     func application(app: UIApplication, openURL url: NSURL, options: [String : Any]) -> Bool {
-        return Lock.resumeAuth(url, options: options)
-     }
-
-     ```
-
-     - parameter url:     url of the Auth session received in `AppDelegate`
-     - parameter options: options used to open the app with the given URL
-
-     - returns: true if the url matched an ongoing Auth session, false otherwise
-     */
-    public static func resumeAuth(_ url: URL, options: [A0URLOptionsKey: Any]) -> Bool {
-        return Auth0.resumeAuth(url, options: options)
-    }
-
-    /**
      Register an AuthProvider to be used for connection, e.g. When using native social integration plugins such as
      Lock-Facebook to provide native authentication.
 

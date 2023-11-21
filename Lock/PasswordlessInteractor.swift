@@ -58,11 +58,11 @@ struct PasswordlessInteractor: PasswordlessAuthenticatable, Loggable {
     func request(_ connection: String, callback: @escaping (PasswordlessAuthenticatableError?) -> Void) {
         guard var identifier = self.identifier, self.validIdentifier else { return callback(.nonValidInput) }
 
-        let passwordlessType = self.options.passwordlessMethod == .code ? PasswordlessType.Code : PasswordlessType.iOSLink
+        let passwordlessType = self.options.passwordlessMethod == .code ? PasswordlessType.code : PasswordlessType.iOSLink
 
         var authenticator: Request<Void, AuthenticationError>
         if self.connection.strategy == "email" {
-            authenticator =  self.authentication.startPasswordless(email: identifier, type: passwordlessType, connection: connection, parameters: self.options.parameters)
+            authenticator =  self.authentication.startPasswordless(email: identifier, type: passwordlessType, connection: connection)
         } else {
             guard let countryCode = self.countryCode else { return callback(.nonValidInput) }
             identifier = countryCode.phoneCode + identifier
@@ -104,14 +104,12 @@ struct PasswordlessInteractor: PasswordlessAuthenticatable, Loggable {
             request = authentication.login(email: identifier,
                                            code: code,
                                            audience: options.audience,
-                                           scope: options.scope,
-                                           parameters: options.parameters)
+                                           scope: options.scope)
         } else {
             request = authentication.login(phoneNumber: identifier,
                                            code: code,
                                            audience: options.audience,
-                                           scope: options.scope,
-                                           parameters: options.parameters)
+                                           scope: options.scope)
         }
         request.start { result in
             self.handle(identifier: identifier, result: result, callback: callback)

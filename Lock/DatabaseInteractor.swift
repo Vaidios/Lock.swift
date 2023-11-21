@@ -137,7 +137,7 @@ struct DatabaseInteractor: DatabaseAuthenticatable, DatabaseUserCreator, Loggabl
 
         self.credentialAuth
             .authentication
-            .createUser(
+            .signup(
                 email: email,
                 username: username,
                 password: password,
@@ -168,10 +168,10 @@ struct DatabaseInteractor: DatabaseAuthenticatable, DatabaseUserCreator, Loggabl
                     Queue.main.async {
                         self.startWebAuth(loginHint: email, screenHint: "signup", callback: { callback(nil, $0) })
                     }
-                case .failure(let cause as AuthenticationError) where cause.code == "invalid_password" && cause.value("name") == "PasswordDictionaryError":
+                case .failure(let cause as AuthenticationError) where cause.code == "invalid_password" && cause.info["name"] as? String == "PasswordDictionaryError":
                     callback(.passwordTooCommon, nil)
                     self.dispatcher.dispatch(result: .error(DatabaseUserCreatorError.passwordTooCommon))
-                case .failure(let cause as AuthenticationError) where cause.code == "invalid_password" && cause.value("name") == "PasswordNoUserInfoError":
+                case .failure(let cause as AuthenticationError) where cause.code == "invalid_password" && cause.info["name"] as? String == "PasswordNoUserInfoError":
                     callback(.passwordHasUserInfo, nil)
                     self.dispatcher.dispatch(result: .error(DatabaseUserCreatorError.passwordHasUserInfo))
                 case .failure(let cause as AuthenticationError) where cause.code == "invalid_password":
