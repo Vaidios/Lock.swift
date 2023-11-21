@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Lock"
-  s.version          = '2.24.1'
+  s.version          = '3.0.0'
   s.summary          = "A library that uses Auth0 for Authentication with Native Look & Feel"
   s.description      = <<-DESC
 [![Auth0](https://i.cloudup.com/1vaSVATKTL.png)](http://auth0.com)
@@ -13,11 +13,11 @@ Auth0 is a SaaS that helps you with Authentication and Authorization. You can us
   s.source           = { :git => "https://github.com/auth0/Lock.swift.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/auth0'
 
-  s.ios.deployment_target = "9.0"
+  s.ios.deployment_target = "13.0"
 
   s.requires_arc = true
 
-  s.dependency 'Auth0', '~> 1.31'
+  s.dependency 'Auth0', '~> 2.5.0'
   s.default_subspecs = 'Classic'
 
   s.subspec 'Classic' do |classic|
