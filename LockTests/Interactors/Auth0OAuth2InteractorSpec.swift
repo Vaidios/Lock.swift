@@ -135,26 +135,26 @@ class Auth0OAuth2InteractorSpec: QuickSpec {
             }
 
             it("should not yield error on success") {
-                authentication.webAuthResult = { return .success(result: mockCredentials()) }
+              authentication.webAuthResult = { return .success(mockCredentials()) }
                 interactor.start("facebook", loginHint: nil, screenHint: nil, useEphemeralSession: false) { error = $0 }
                 expect(error).toEventually(beNil())
             }
 
             it("should call credentials callback") {
                 let expected = mockCredentials()
-                authentication.webAuthResult = { return .success(result: expected) }
+              authentication.webAuthResult = { return .success(expected) }
                 interactor.start("facebook", loginHint: nil, screenHint: nil, useEphemeralSession: false) { error = $0 }
                 expect(credentials).toEventually(equal(expected))
             }
 
             it("should handle cancel error") {
-                authentication.webAuthResult = { return .failure(error: WebAuthError.userCancelled) }
+              authentication.webAuthResult = { return .failure(WebAuthError.userCancelled) }
                 interactor.start("facebook", loginHint: nil, screenHint: nil, useEphemeralSession: false) { error = $0 }
                 expect(error).toEventually(equal(OAuth2AuthenticatableError.cancelled))
             }
 
             it("should handle generic error") {
-                authentication.webAuthResult = { return .failure(error: WebAuthError.noBundleIdentifierFound) }
+              authentication.webAuthResult = { return .failure(WebAuthError.noBundleIdentifierFound) }
                 interactor.start("facebook", loginHint: nil, screenHint: nil, useEphemeralSession: false) { error = $0 }
                 expect(error).toEventually(equal(OAuth2AuthenticatableError.couldNotAuthenticate))
             }

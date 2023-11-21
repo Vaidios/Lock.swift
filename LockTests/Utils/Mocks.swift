@@ -239,7 +239,7 @@ class MockAuthentication: Authentication {
 
     var webAuth: MockWebAuth?
     
-    var webAuthResult: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(error: AuthenticationError(string: "FAILED", statusCode: 500)) }
+  var webAuthResult: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(AuthenticationError(string: "FAILED", statusCode: 500)) }
 
     required init(clientId: String, domain: String) {
         self.authentication = Auth0.authentication(clientId: clientId, domain: domain)
@@ -334,7 +334,7 @@ class MockWebAuth: WebAuth {
     var leeway: Int? = nil
     var maxAge: Int? = nil
 
-    var result: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(error: AuthenticationError(string: "FAILED", statusCode: 500)) }
+  var result: () -> Auth0.Result<Credentials> = { return Auth0.Result.failure(AuthenticationError(string: "FAILED", statusCode: 500)) }
     var telemetry: Telemetry = Telemetry()
     var logger: Auth0.Logger? = nil
 
@@ -504,7 +504,7 @@ class MockNativeAuthTransaction: NativeAuthTransaction {
     }
 
     func cancel() {
-        self.delayed(.failure(error: WebAuthError.userCancelled))
+      self.delayed(.failure(WebAuthError.userCancelled))
         self.delayed = { _ in }
     }
 
@@ -516,7 +516,7 @@ class MockNativeAuthTransaction: NativeAuthTransaction {
 
     /// Test Hooks
     var onNativeAuth: () -> Auth0.Result<NativeAuthCredentials> = {
-        return .success(result: NativeAuthCredentials(token: "SocialToken", extras: [:]))
+      return .success(NativeAuthCredentials(token: "SocialToken", extras: [:]))
     }
 }
 
