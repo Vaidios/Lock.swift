@@ -24,29 +24,31 @@ import Foundation
 import Auth0
 
 struct CredentialAuth {
-
+    
     let oidc: Bool
     let realm: String
     let authentication: Authentication
-
+    
     func request(withIdentifier identifier: String, password: String, options: Options) -> Request<Credentials, AuthenticationError> {
-//        if oidc {
-//            return self.authentication.loginOI
-//            return self.authentication.login(
-//                usernameOrEmail: identifier,
-//                password: password,
-//                realm: realm,
-//                audience: options.audience,
-//                scope: options.scope,
-//                parameters: options.parameters
-//            )
-//        } else {
-//        }
-        return self.authentication.login(
-            usernameOrEmail: identifier,
-            password: password, 
-            realmOrConnection: "realm",
-            scope: options.scope
-        )
+        if oidc {
+            return self.authentication
+                .login(
+                    usernameOrEmail: identifier,
+                    password: password,
+                    realmOrConnection: realm,
+                    audience: options.audience,
+                    scope: options.scope
+                )
+                .parameters(options.parameters)
+        } else {
+            return self.authentication
+                .login(
+                    usernameOrEmail: identifier,
+                    password: password,
+                    realmOrConnection: realm,
+                    scope: options.scope
+                )
+                .parameters(options.parameters)
+        }
     }
 }
