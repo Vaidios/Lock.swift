@@ -92,6 +92,10 @@ public class Lock: NSObject {
     public static func classic() -> Lock {
         return Lock()
     }
+    
+    public static func classic(session: URLSession = .shared, bundle: Bundle = .main) -> Lock {
+        return Lock(authentication: Auth0.authentication(session: session, bundle: bundle), webAuth: Auth0.webAuth(session: session, bundle: bundle))
+    }
 
     /**
      Creates a new Lock passwordless instance loading Auth0 client info from `Auth0.plist` file in main bundle.
